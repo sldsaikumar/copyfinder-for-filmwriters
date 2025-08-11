@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Search, Film, Sparkles, Zap, Star, Play, Calendar, Users, Award, Globe } from 'lucide-react';
+import { Search, Film, Sparkles, Zap, Star, Calendar, Users, Globe } from 'lucide-react';
 
 const CinePlotAnalyzer = () => {
   const [plotText, setPlotText] = useState('');
@@ -11,8 +11,8 @@ const CinePlotAnalyzer = () => {
   const [loadingText, setLoadingText] = useState('');
   const [analysisStartTime, setAnalysisStartTime] = useState(null);
   const canvasRef = useRef(null);
-  const sceneRef = useRef(null);
-  const animationRef = useRef(null);
+  const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer; } | null>(null);
+  const animationRef = useRef<number | null>(null);
 
   // 3D Scene Setup
   useEffect(() => {
@@ -185,7 +185,7 @@ const CinePlotAnalyzer = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY || '', // Add your key in Vercel env vars
+          "x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY || '',
           "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
@@ -364,7 +364,7 @@ Prioritize including films from AT LEAST 6 different countries/languages. Make s
               <p className="text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
                 Discover films with similar plots to your story from ALL world cinema - Bollywood, K-Cinema, European, Latin American & more
               </p>
-                <div className="flex justify-center space-x-6 text-sm text-gray-400">
+              <div className="flex justify-center space-x-6 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Globe className="w-5 h-5" />
                   <span>Global Cinema • All Languages</span>
